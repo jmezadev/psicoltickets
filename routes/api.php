@@ -19,8 +19,15 @@ Route::resource('/tickets', 'Tickets\TicketsController');
 Route::resource('/tickets/store', 'Tickets\TicketsController');
 
 // Users
-Route::resource('/users', 'Users\UserController');
+//Route::resource('/users', 'Users\UserController');
 Route::resource('/user/store', 'Users\UserController');
+
+
+
+
+Route::middleware('auth:api')->group( function () {
+    Route::resource('/users', 'Users\UserController');
+});
 
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

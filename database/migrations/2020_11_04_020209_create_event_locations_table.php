@@ -18,6 +18,7 @@ class CreateEventLocationsTable extends Migration
             $table->string('name');
             $table->foreignId('event_id')->references('id')->on('events');
             $table->float('price');
+            $table->integer('total_tickets')->default(1);
             $table->timestamps();
         });
     }
