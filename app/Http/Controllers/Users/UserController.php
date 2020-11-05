@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tickets\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -85,22 +87,29 @@ class UserController extends Controller
 
     public function userTickets(Request $request)
     {
-        $user_data = [];
+        $user_transactions_data = [];
 
         $user = User::where('id', $request->user_id)->with('userTransactions')->first();
 
-        /*foreach ($user->userTransactions AS $transactions) {
-            //dd($transactions->transactionTickets);
-            //$transactions[] = 
-            $user_data[] = [
-                'user' => $user,
-                'transactions' => $transactions,
+        foreach ($user->userTransactions AS $transaction) {
+            $user_transaction = Transaction::where('id', $transaction->id)->with('transactionTickets')->first();
+
+            $user_transactions_data[] = [
+                'transaction_id' => $user_transaction->id,
+                'event_id' => $user_transaction->event_id,
+                'event_name' => $user_transaction->event->name,
+                'event_time' => Carbon::parse($user_transaction->event->datetime)->format('d/M/Y H:i'),
+                'tickets' => $user_transaction->transactionTickets,
+                'tickets_count' => $user_transaction->transactionTickets->count(),
+                'date' => Carbon::parse($user_transaction->created_at)->format('d/M/Y H:i'),
             ];
-        }*/
-        /*$user_transactions = $user->userTransactions;
+        }
 
-        dd($user_transactions->transactionTickets);*/
+        $user_data = [
+            'user' => $user,
+            'transactions' => $user_transactions_data,
+        ];
 
-        return response()->json($user);
+        return response()->json($user_data);
     }
 }

@@ -16,7 +16,7 @@ class EventsSeeder extends Seeder
         DB::table('events')->insert([
             'name' => 'The Beatles | Concert in Cali',
             'description' => 'Dont miss The Beatles in concert!',
-            'image' => 'default.png',
+            'image' => 'beatles-flyer-low.jpg',
             'country' => 'Colombia',
             'city' => 'Cali',
             'address' => 'Cr36 5 B-32 Cali - Valle Del Cauca | Estadio Pascual Guerrero',
@@ -75,7 +75,7 @@ class EventsSeeder extends Seeder
         DB::table('events')->insert([
             'name' => 'Red Hot Chili Peppers',
             'description' => 'Red Hot Chili Peppers in Bogotá',
-            'image' => 'default.png',
+            'image' => 'rhcp.jpg',
             'country' => 'Colombia',
             'city' => 'Bogotá DC',
             'address' => 'Dg. 61c #26-36, Bogotá, Cundinamarca | Movistar Arena',

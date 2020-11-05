@@ -12,4 +12,9 @@ class Transaction extends Model
     {
         return $this->hasMany(Ticket::class, 'transaction_id');
     }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 }
