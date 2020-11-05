@@ -17,6 +17,11 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'buyer_user_id');
     }
 
+    public function transactionTickets()
+    {
+        return $this->hasMany(Ticket::class, 'transaction_id');
+    }
+
     public function userTransactions()
     {
         return $this->hasMany(Transaction::class, 'buyer_user_id');

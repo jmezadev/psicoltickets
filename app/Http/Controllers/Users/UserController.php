@@ -85,7 +85,18 @@ class UserController extends Controller
 
     public function userTickets(Request $request)
     {
+        $user_data = [];
+
         $user = User::where('id', $request->user_id)->with('userTransactions')->first();
+
+        /*foreach ($user->userTransactions AS $transactions) {
+            //dd($transactions->transactionTickets);
+            //$transactions[] = 
+            $user_data[] = [
+                'user' => $user,
+                'transactions' => $transactions,
+            ];
+        }*/
         /*$user_transactions = $user->userTransactions;
 
         dd($user_transactions->transactionTickets);*/
