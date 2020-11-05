@@ -17,7 +17,8 @@ class CreateTicketsTable extends Migration
             $table->id();
             $table->foreignId('event_id')->references('id')->on('events');
             $table->foreignId('buyer_user_id')->references('id')->on('users');
-            $table->foreignId('creator_user_id')->references('id')->on('users');
+            $table->foreignId('transaction_id')->references('id')->on('transactions');
+            $table->foreignId('event_location_id')->references('id')->on('event_locations');
             $table->timestamps();
         });
     }

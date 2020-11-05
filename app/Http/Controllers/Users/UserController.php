@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 
@@ -31,23 +32,34 @@ class UserController extends Controller
                 'phone' => 'required',
             ],
             [
-
+                'name.required' => 'Debes ingresar tu nombre',
+                'last_name.required' => 'Debes ingresar tu apellido',
+                'email.required' => 'Debes ingresar tu email',
+                'email.unique' => 'El correo ya está registrado',
+                'password.required' => 'Debes ingresar tu contraseña',
+                'dni.required' => 'Debes ingresar tu número de documento',
+                'phone.required' => 'Debes ingresar tu número de teléfono',
             ]
         );
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->dni = $request->dni;
-        $user->phone = $request->phone;
-        $success = $user->save();
+        try {
+            DB::beginTransaction();
 
-        if ($success) {
+            $user = new User();
+            $user->name = $request->name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->address = $request->address;
+            $user->dni = $request->dni;
+            $user->phone = $request->phone;
+            $success = $user->save();
+
+            DB::commit();
             return response()->json(['success' => $success]);
-        } else {
-            return response()->json(['success' => false, 'msg' => 'Ha ocurrido un error al crear la al usuario. Intente mas tarde.', 'code' => 1], 500);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['success' => false, 'msg' => 'Ha ocurrido un error al crear la al usuario. Intente mas tarde.', 'code' => $e->getCode(), 'error' => $e->getMessage()]);
         }
     }
 
@@ -69,5 +81,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function userTickets(Request $request)
+    {
+        dd($request->all());
     }
 }

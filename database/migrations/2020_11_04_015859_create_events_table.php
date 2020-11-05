@@ -17,6 +17,7 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nulleable();
+            $table->string('image')->nulleable();
             $table->string('country')->default('Colombia');
             $table->string('city')->default('Cali');
             $table->string('address')->nulleable();

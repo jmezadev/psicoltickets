@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Events;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tickets\Event;
+use App\Models\Tickets\EventLocation;
+use App\Models\Tickets\Ticket;
+use App\Models\Tickets\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -14,7 +20,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Event::all());
     }
 
     /**
@@ -46,7 +52,27 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $locations_data = [];
+
+        $event = Event::where('id', $id)->with('eventLocations')->first();
+        $event->event_date = Carbon::parse($event->datetime)->format('d/M/Y');
+        $event->event_hour = Carbon::parse($event->datetime)->format('h:i a');
+
+        foreach ($event->eventLocations AS $event_location) {
+            $locations_data[$event_location->id] = (object)[
+                'id' => $event_location->id,
+                'name' => $event_location->name,
+                'event_id' => $event_location->event_id,
+                'total_tickets' => $event_location->total_tickets,
+                'price' => number_format($event_location->price, 0, '.', '.'),
+                'price_value' => $event_location->price,
+            ];
+        }
+
+        $event->locations = $locations_data;
+        unset($event->eventLocations);
+
+        return response()->json($event);
     }
 
     /**
