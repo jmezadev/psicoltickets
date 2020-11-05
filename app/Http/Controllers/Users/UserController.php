@@ -85,6 +85,11 @@ class UserController extends Controller
 
     public function userTickets(Request $request)
     {
-        dd($request->all());
+        $user = User::where('id', $request->user_id)->with('userTransactions')->first();
+        /*$user_transactions = $user->userTransactions;
+
+        dd($user_transactions->transactionTickets);*/
+
+        return response()->json($user);
     }
 }
